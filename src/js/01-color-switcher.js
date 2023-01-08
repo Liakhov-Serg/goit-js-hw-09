@@ -1,7 +1,7 @@
 // Import library
 // import getRandomHexColor from './randomHexColor';
 
-//Get button start/stop element
+// Get button start/stop element
 
 const refs = {
   startBtn:document.querySelector(`button[data-start]`),
