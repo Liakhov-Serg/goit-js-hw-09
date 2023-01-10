@@ -1,40 +1,99 @@
-// Описаний в документації
-import flatpickr from "flatpickr";
-// Додатковий імпорт стилів
-import "flatpickr/dist/flatpickr.min.css";
-
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+let selectedTime = null;
+// Создаем объект с переменными
 const refs = {
-      days: document.querySelector(`[data-days]`),
-      hours: document.querySelector(`[data-hours]`),
-      minutes: document.querySelector(`[data-minutes]`),
-      seconds: document.querySelector(`[data-seconds]`),
-      btnStart: document.querySelector(`[data-start]`),
-      input: document.querySelector(`[datetime-picker]`)
-}
-console.log(refs);
-
-const options = {
-      counterTime: true,
-      counterOclock: true,
-      defaultDate: new Date(),
-      minuteInc: 1,
-      onClose(selectDates) {
-            console.log(selectDates[0]);
-      }
-
+  inputDate: document.querySelector('#datetime-picker'),
+  startBtn: document.querySelector('button[data-start]'),
+  days: document.querySelector('span[data-days]'),
+  hours: document.querySelector('span[data-hours]'),
+  minutes: document.querySelector('span[data-minutes]'),
+  seconds: document.querySelector('span[data-seconds]'),
+  // fieldEl: document.querySelectorAll('.field'),
 };
-let interval;
+// Кнопка "Страт" изначально неактивная
+refs.startBtn.disabled = true;
+// Вешаем слушателя на форму
+function pad(value) {
+  return String(value).padStart(2, '0');
+}
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  // Remaining days
+  const days = pad(Math.floor(ms / day));
+  // Remaining hours
+  const hours = pad(Math.floor((ms % day) / hour));
+  // Remaining minutes
+  const minutes = pad(Math.floor(((ms % day) % hour) / minute));
+  // Remaining seconds
+  const seconds = pad(Math.floor((((ms % day) % hour) % minute) / second));
+  return { days, hours, minutes, seconds };
+}
+console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    if (selectedDates[0] < new Date()) {
+      window.alert('Please choose a date in the future');
+      selectedDates[0] = new Date();
+    } else {
+      refs.startBtn.disabled = false;
+      selectedTime = selectedDates[0];
+      console.log(selectedTime);
+    }
+    console.log(selectedDates[0]);
+  },
+};
+// Подключаем функцию календаря
+flatpickr(refs.inputDate, options);
+// Вешаем слушателя на кнопку "Старт"
+refs.startBtn.addEventListener('click', () => {
+  startTimer();
+});
+// Запускаем таймер
+function startTimer() {
+  setInterval(() => {
+    const currentTime = Date.now();
+    const deltaTime = selectedTime - currentTime;
+    const time = convertMs(deltaTime);
+    updateClockFace(time);
+  }, 1000);
+  refs.startBtn.disabled = true;
+  return;
+}
+// Выводим часы
+function updateClockFace({ days, hours, minutes, seconds }) {
+  refs.days.textContent = days;
+  refs.hours.textContent = hours;
+  refs.minutes.textContent = minutes;
+  refs.seconds.textContent = seconds;
+}
+// Стелизуем часы
+// refs.fieldEl.forEach(el => {
+//   el.style.display = 'flex';
+//   el.style.flexDirection = 'column';
+//   el.style.justifyContent = 'center';
+// });
 
-
-flatpickr(refs.input, options);
-
-const countTime = (() => {
-      const countdown = new Date(refs.input.value) - new Date();
-       if(countdown <=0){
-            alert(`Please`);
-            refs.btnStart.setAttribute(disabled, true);
-       } else {
-            refs.btnStart.removeAttribute(`disabled`)
-       }
-
-})
+function startTimer() {
+      setInterval(() => {
+        const currentTime = Date.now();
+        const deltaTime = selectedTime - currentTime;
+        const time = convertMs(deltaTime);
+        updateClockFace(time);
+        if (deltaTime <= 0) {
+          clearInterval(timeinterval);
+        }
+      }, 1000);
+      refs.startBtn.disabled = true;
+    }
