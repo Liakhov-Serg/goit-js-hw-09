@@ -25,6 +25,7 @@ const options = {
 };
 let interval;
 
+
 flatpickr(refs.input, options);
 
 const countTime = (() => {
