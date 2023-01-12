@@ -1,56 +1,50 @@
-function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
+import Notiflix from 'notiflix';
+const refs = {
+  form: document.querySelector('.form'),
+};
+refs.form.addEventListener('submit', handleSubmit);
+function handleSubmit(e) {
+  e.preventDefault();
+  const delay = +e.currentTarget.elements.delay.value;
+  const step = +e.currentTarget.elements.step.value;
+  const amount = +e.currentTarget.elements.amount.value;
+  for (let i = 0; i < amount; i += 1) {
+    if (i === 0) {
+      createPromise(i, delay)
+        .then(({ position, delay }) => {
+          Notiflix.Notify.success(
+            `:white mark: Fulfilled promise ${position} in ${delay}ms`
+          );
+        })
+        .catch(({ position, delay }) => {
+          Notiflix.Notify.failure(
+            `:х: Rejected promise ${position} in ${delay}ms`
+          );
+        });
+    } else {
+      createPromise(i + 1, delay +i*step)
+        .then(({ position, delay }) => {
+          Notiflix.Notify.success(
+            `:white mark: Fulfilled promise ${position} in ${delay}ms`
+          );
+        })
+        .catch(({ position, delay }) => {
+          Notiflix.Notify.failure(
+            `:х: Rejected promise ${position} in ${delay}ms`
+          );
+        });
+    }
   }
 }
-// const promise = new Promise((resolve, reject) => {
-//   const canFulfill = Math.random() > 0.3;
-
-//   setTimeout(() => {
-//   if (canFulfill) {
-//     resolve(`Проміс виконався успішно, с результатом (виконан, fulfilled)`);
-//   }
-//   reject(`Проміс виконався з помилкою (відхилено, rejected)`);
-// }, 2000);
-  
-// });
-// // Виконали планіровку - відкладені виклики
-// promise
-// .then(onFulfilled)
-// .then(x => {
-//   console.log(x);
-//   return 10;
-// })
-// .then(y => {
-//   console.log(y);
-// })
-// .catch(error => console.log(error))
-// .finally(() => console.log(`В кожному випадку`));
-  
-
-
-// console.log(promise);
-
-// function onFulfilled(result) {
-//   console.log(`onFulfilled -> onFulfilled`);
-// }
-
-const makeOrder = dish => {
-  
-  return Promise.resolve(`Ось ваше замовлення`);
+function createPromise(position, delay) {
+  return new Promise((resolve, reject) => {
+    const shouldResolve = Math.random() > 0.3;
+    setTimeout(() => {
+      if (shouldResolve) {
+        resolve({ position, delay });
+      } else {
+        reject({ position, delay });
       }
-     
-
-makeOrder(`пиріжок`).then(onMakeOrderSuccess).catch(onMakeOrderError);
-
-function onMakeOrderSuccess(result) {
-  console.log(`onMakeOrderSuccess`);
-  console.log(result);
-}
-function onMakeOrderError(error) {
-  console.log(`onMakeOrderError`);
-  console.log(error);
+    }, delay);
+  });
 }
