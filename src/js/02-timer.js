@@ -1,4 +1,3 @@
-
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 let selectedTime = null;
@@ -81,7 +80,7 @@ function updateClockFace({ days, hours, minutes, seconds }) {
 // Стиль годинник
 
 function startTimer() {
-  timeinterval = setInterval(() => {
+  let timeinterval = setInterval(() => {
         const currentTime = Date.now();
         const deltaTime = selectedTime - currentTime;
         const time = convertMs(deltaTime);
