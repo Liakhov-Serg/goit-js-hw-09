@@ -86,12 +86,12 @@ function updateClockFace({ days, hours, minutes, seconds }) {
 // });
 
 function startTimer() {
-      setInterval(() => {
+  timeinterval = setInterval(() => {
         const currentTime = Date.now();
         const deltaTime = selectedTime - currentTime;
         const time = convertMs(deltaTime);
         updateClockFace(time);
-        if (deltaTime <= 0) {
+        if (deltaTime <= 1000) {
           clearInterval(timeinterval);
         }
       }, 1000);
