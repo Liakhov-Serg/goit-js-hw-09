@@ -78,9 +78,9 @@ function updateClockFace({ days, hours, minutes, seconds }) {
   refs.seconds.textContent = seconds;
 }
 // Стиль годинник
-
+let timeinterval;
 function startTimer() {
-  let timeinterval = setInterval(() => {
+  timeinterval = setInterval(() => {
         const currentTime = Date.now();
         const deltaTime = selectedTime - currentTime;
         const time = convertMs(deltaTime);
