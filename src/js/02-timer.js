@@ -1,8 +1,8 @@
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 let selectedTime = null;
-// Создаем объект с переменными
+
 const refs = {
   inputDate: document.querySelector('#datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
@@ -12,9 +12,9 @@ const refs = {
   seconds: document.querySelector('span[data-seconds]'),
   // fieldEl: document.querySelectorAll('.field'),
 };
-// Кнопка "Страт" изначально неактивная
+// Start
 refs.startBtn.disabled = true;
-// Вешаем слушателя на форму
+// Слухач на форму
 function pad(value) {
   return String(value).padStart(2, '0');
 }
@@ -54,13 +54,13 @@ const options = {
     console.log(selectedDates[0]);
   },
 };
-// Подключаем функцию календаря
+// Підключ календар
 flatpickr(refs.inputDate, options);
-// Вешаем слушателя на кнопку "Старт"
+// Слухач на кнопку Start
 refs.startBtn.addEventListener('click', () => {
   startTimer();
 });
-// Запускаем таймер
+// Запуск таймер
 function startTimer() {
   setInterval(() => {
     const currentTime = Date.now();
@@ -71,19 +71,14 @@ function startTimer() {
   refs.startBtn.disabled = true;
   return;
 }
-// Выводим часы
+
 function updateClockFace({ days, hours, minutes, seconds }) {
   refs.days.textContent = days;
   refs.hours.textContent = hours;
   refs.minutes.textContent = minutes;
   refs.seconds.textContent = seconds;
 }
-// Стелизуем часы
-// refs.fieldEl.forEach(el => {
-//   el.style.display = 'flex';
-//   el.style.flexDirection = 'column';
-//   el.style.justifyContent = 'center';
-// });
+// Стиль годинник
 
 function startTimer() {
   timeinterval = setInterval(() => {
