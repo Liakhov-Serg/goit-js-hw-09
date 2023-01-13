@@ -79,6 +79,7 @@ function updateClockFace({ days, hours, minutes, seconds }) {
 }
 // Стиль годинник
 let timeinterval;
+
 function startTimer() {
   timeinterval = setInterval(() => {
         const currentTime = Date.now();
